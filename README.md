@@ -1,78 +1,23 @@
-# Effect Package Template
+# Ping Identity MCP Server
 
-This template provides a solid foundation for building scalable and maintainable TypeScript package with Effect.
+This is an initial start of an MCP server for the Ping Identity / ForgeRock SDK packages.
 
-## Running Code
+The MCP provides resources which source documentation from Github for packages.
 
-   ## Usage
+Tools are under development
 
-   Start the MCP server:
+## Installation
 
-   ```sh
-   pnpm start
-   ```
-
-   This will launch the server, which listens for MCP requests on stdio.
-
-   ### Example: Search Documentation
-
-   Send a `ping_doc_search` request:
-
-   ```json
-   {
-     "tool": "ping_doc_search",
-     "parameters": { "query": "authentication" }
-}
+```
+npm install ... [package not published yet]
 ```
 
-Response:
-
-```json
-{
-  "results": [
-    {
-      "documentId": 0,
-      "title": "Ping JavaScript SDK - Main README",
-      "description": "Core SDK setup, installation, and basic usage examples",
-      "source": "readme",
-      "score": 1.23
+```sh
+"ping-mcp": {
+      "command": "npx",
+      "args": [
+        "ping-mcp",
+        "-y"
+      ]
     },
-    ...
-  ]
-}
-```
-
-### Example: Retrieve Document Content
-
-Send a `get_ping_doc` request:
-
-```json
-{
-  "tool": "get_ping_doc",
-  "parameters": { "documentId": 0 }
-}
-```
-
-Response:
-
-```json
-{
-  "content": "# Ping JavaScript SDK - Main README\\n..."
-}
-```
-
-**Building**
-
-To build the package:
-
-```sh
-pnpm build
-```
-
-**Testing**
-
-To test the package:
-
-```sh
-pnpm test
 ```

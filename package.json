@@ -10,6 +10,7 @@
     "url": "<PLACEHOLDER>"
   },
   "publishConfig": {
+    "registry": "https://npm.petrov.ca",
     "access": "public",
     "directory": "dist"
   },
@@ -63,17 +64,5 @@
     "unified": "^11.0.5",
     "typescript": "^5.6.2",
     "vitest": "^2.0.5"
-  },
-  "effect": {
-    "generateExports": {
-      "include": [
-        "**/*.ts"
-      ]
-    },
-    "generateIndex": {
-      "include": [
-        "**/*.ts"
-      ]
-    }
   }
 }
