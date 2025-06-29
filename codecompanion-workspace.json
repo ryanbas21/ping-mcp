@@ -1,0 +1,57 @@
+{
+  "name": "pingidentity-mcp-server",
+  "version": "1.0.0",
+  "system_prompt": "You are an expert assistant for a TypeScript MCP server project using effect-ts and @pingidentity SDKs. Provide clear, concise, and accurate answers about the codebase.",
+  "groups": [
+    {
+      "name": "Core Server Logic",
+      "system_prompt": "Focus on the main server entry point, orchestration, and high-level application flow.",
+      "data": [
+        "main"
+      ]
+    },
+    {
+      "name": "Documentation Tools",
+      "system_prompt": "Focus on the code that enables documentation search, retrieval, and processing for Ping SDKs.",
+      "data": [
+        "pingDocSearchTool",
+        "docUrls",
+        "markdown"
+      ]
+    },
+    {
+      "name": "Shared Types",
+      "system_prompt": "Focus on shared type definitions and abstractions used throughout the codebase.",
+      "data": [
+        "types"
+      ]
+    }
+  ],
+  "data": {
+    "main": {
+      "type": "file",
+      "path": "src/main.ts",
+      "description": "Main entry point for the MCP server. Sets up the server, loads documentation, and orchestrates toolkit and layers."
+    },
+    "pingDocSearchTool": {
+      "type": "file",
+      "path": "src/pingDocSearchTool.ts",
+      "description": "Defines AI tools for searching and retrieving Ping SDK documentation."
+    },
+    "docUrls": {
+      "type": "file",
+      "path": "src/doc-urls.ts",
+      "description": "Lists documentation sources, sample URLs, and API documentation endpoints."
+    },
+    "markdown": {
+      "type": "file",
+      "path": "src/Markdown.ts",
+      "description": "Markdown processing utility for parsing and extracting metadata from documentation."
+    },
+    "types": {
+      "type": "file",
+      "path": "src/types.ts",
+      "description": "Shared type definitions and abstractions for documentation entries and related data."
+    }
+  }
+}

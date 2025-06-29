@@ -6,7 +6,7 @@ export interface DocumentEntry {
   title: string;
   description: string;
   content: Effect.Effect<string>;
-  source: "readme" | "api-docs" | "sample" | "tutorial";
+  source: "readme" | "api-docs" | "sample" | "tutorial" | string;
   package?: string;
   url: string;
 }

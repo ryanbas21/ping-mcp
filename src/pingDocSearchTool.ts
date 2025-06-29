@@ -28,4 +28,3 @@ export const GetPingDocTool = AiTool.make("get_ping_doc", {
     content: Schema.String,
   }),
 });
-

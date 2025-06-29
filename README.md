@@ -1,18 +1,65 @@
 # Effect Package Template
 
-This template provides a solid foundation for building scalable and maintainable TypeScript package with Effect. 
+This template provides a solid foundation for building scalable and maintainable TypeScript package with Effect.
 
 ## Running Code
 
-This template leverages [tsx](https://tsx.is) to allow execution of TypeScript files via NodeJS as if they were written in plain JavaScript.
+   ## Usage
 
-To execute a file with `tsx`:
+   Start the MCP server:
 
-```sh
-pnpm tsx ./path/to/the/file.ts
+   ```sh
+   pnpm start
+   ```
+
+   This will launch the server, which listens for MCP requests on stdio.
+
+   ### Example: Search Documentation
+
+   Send a `ping_doc_search` request:
+
+   ```json
+   {
+     "tool": "ping_doc_search",
+     "parameters": { "query": "authentication" }
+}
 ```
 
-## Operations
+Response:
+
+```json
+{
+  "results": [
+    {
+      "documentId": 0,
+      "title": "Ping JavaScript SDK - Main README",
+      "description": "Core SDK setup, installation, and basic usage examples",
+      "source": "readme",
+      "score": 1.23
+    },
+    ...
+  ]
+}
+```
+
+### Example: Retrieve Document Content
+
+Send a `get_ping_doc` request:
+
+```json
+{
+  "tool": "get_ping_doc",
+  "parameters": { "documentId": 0 }
+}
+```
+
+Response:
+
+```json
+{
+  "content": "# Ping JavaScript SDK - Main README\\n..."
+}
+```
 
 **Building**
 
