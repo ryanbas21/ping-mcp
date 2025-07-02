@@ -1,22 +1,12 @@
 import { AiToolkit } from '@effect/ai';
 import { HttpClient } from '@effect/platform';
-import {
-  NodeHttpClient,
-} from '@effect/platform-node';
-import {
-  Array,
-  Cache,
-  Duration,
-  Effect,
-  Layer,
-  pipe,
-  Schedule,
-} from 'effect';
+import { NodeHttpClient } from '@effect/platform-node';
+import { Array, Cache, Duration, Effect, Layer, pipe, Schedule } from 'effect';
 import MiniSearch from 'minisearch';
 import { apiDocUrls, pingReadmes, pingSamples } from './doc-urls.js';
 import { GetPingDocTool, PingDocSearchTool } from './pingDocSearchTool.js';
 import type { DocumentEntry } from './types.js';
-import { Markdown } from './Markdown.js';
+import { Markdown } from './services/Markdown.js';
 
 export const Toolkit = AiToolkit.make(PingDocSearchTool, GetPingDocTool);
 
