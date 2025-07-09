@@ -1,7 +1,6 @@
 {
   "name": "ping-mcp",
   "version": "0.0.1",
-  "type": "module",
   "packageManager": "pnpm@9.10.0",
   "license": "MIT",
   "description": "Ping Identity MCP Server",
@@ -67,6 +66,9 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
+    "@rockcarver/frodo-lib": "^3.3.0",
+    "dotenv": "^17.2.0",
+    "frodo-lib": "^2.4.1",
     "pkg-pr-new": "^0.0.54",
     "sitemapper": "^4.0.2"
   }
