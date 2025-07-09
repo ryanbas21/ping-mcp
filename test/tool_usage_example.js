@@ -1,7 +1,8 @@
 import { spawn } from 'child_process';
+import 'dotenv/config';
 import * as console from 'console';
 
-const mcp = spawn('node', ['dist/main.cjs'], {
+const mcp = spawn('node', ['dist/main.js'], {
   stdio: ['pipe', 'pipe', 'pipe'],
 });
 
@@ -65,22 +66,20 @@ mcp.stdout.on('data', data => {
         // Test ping_doc_search tool
         setTimeout(() => {
           sendRequest('tools/call', {
-            name: 'ping_doc_search',
-            arguments: {
-              query: 'authentication',
-            },
+            name: 'list_journey',
+            arguments: {},
           });
         }, 1000);
 
-        // Test get_ping_doc tool (get document ID 0)
-        setTimeout(() => {
-          sendRequest('tools/call', {
-            name: 'get_ping_doc',
-            arguments: {
-              documentId: 0,
-            },
-          });
-        }, 1500);
+        // // Test get_ping_doc tool (get document ID 0)
+        // setTimeout(() => {
+        //   sendRequest('tools/call', {
+        //     name: 'get_ping_doc',
+        //     arguments: {
+        //       documentId: 0,
+        //     },
+        //   });
+        // }, 1500);
       }
     } catch (e) {
       console.log('Non-JSON output:', line);
