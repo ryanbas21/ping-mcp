@@ -31,7 +31,7 @@
     "noUncheckedIndexedAccess": false,
     "strictNullChecks": true,
     "baseUrl": ".",
-    "target": "ES2022",
+    "target": "NodeNext",
     "module": "NodeNext",
     "incremental": true,
     "removeComments": false
