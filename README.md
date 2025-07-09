@@ -14,10 +14,16 @@ npm install ... [package not published yet]
 
 ```sh
 "ping-mcp": {
-      "command": "npx",
-      "args": [
-        "ping-mcp",
-        "-y"
-      ]
-    },
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "ping-mcp",
+          "-y"
+        ],
+        "env": {
+          "AM_USERNAME" : "username",
+          "AM_PASSWORD": "password",
+          "AM_URL": "am_url"
+        }
+    }
 ```
