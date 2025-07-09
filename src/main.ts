@@ -11,13 +11,14 @@ import { Layer, Logger } from 'effect';
 
 import { Markdown } from './services/Markdown.js';
 import { DocsCache } from './services/DocsCache.js';
-import { Toolkit, ToolkitLayer } from './tools.js';
 import { Readmes } from './resources.js';
+import { JourneyTools, ListJourneyToolkit } from './tools/create-oauth-app.js';
+import { Frodo } from './services/Frodo.js';
 
 // purposefully exporting beause it's unused for now.
 // this would need to be provided as a tool below.
-export const PingSDKMcpServer = McpServer.toolkit(Toolkit).pipe(
-  Layer.provide(ToolkitLayer),
+export const PingSDKMcpServer = McpServer.toolkit(ListJourneyToolkit).pipe(
+  Layer.provide(JourneyTools),
 );
 
 McpServer.layerStdio({
@@ -27,10 +28,12 @@ McpServer.layerStdio({
   stdout: NodeSink.stdout,
 }).pipe(
   // providing services and tools
+  Layer.provide(PingSDKMcpServer),
   Layer.provide(Readmes),
   Layer.provide(DocsCache.Default),
 
   // providing dependencies
+  Layer.provide(Frodo.Default),
   Layer.provide(Markdown.Default),
   Layer.provide(NodeHttpClient.layerUndici),
 

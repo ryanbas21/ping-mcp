@@ -1,17 +1,12 @@
 import 'dotenv/config';
 import { Effect } from 'effect';
 import { Frodo } from '../src/services/Frodo.js';
+import { ListJourney } from '../src/tools/create-oauth-app';
 
 const program = Effect.gen(function* () {
-  const frodo = yield* Frodo;
+  const journeyObjects = yield* ListJourney;
 
-  const tokens = yield* Effect.tryPromise({
-    try: () => frodo.login.getTokens(),
-    catch: () => new Error('unable to retrieve tokens'),
-  });
-
-  console.log('get tokens', tokens);
-  return tokens;
+  console.log('journeyObjects', journeyObjects);
 });
 
 const eff = program.pipe(Effect.provide(Frodo.Default));
