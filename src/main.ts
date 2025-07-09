@@ -13,6 +13,7 @@ import { Markdown } from './services/Markdown.js';
 import { DocsCache } from './services/DocsCache.js';
 import { Toolkit, ToolkitLayer } from './tools.js';
 import { Readmes } from './resources.js';
+import { SiteMapperService } from './services/SiteMapper.js';
 
 // purposefully exporting beause it's unused for now.
 // this would need to be provided as a tool below.
@@ -33,6 +34,7 @@ McpServer.layerStdio({
   // providing dependencies
   Layer.provide(Markdown.Default),
   Layer.provide(NodeHttpClient.layerUndici),
+  Layer.provide(SiteMapperService.Default),
 
   // providing http server related layers
   Layer.provide(Logger.add(Logger.prettyLogger({ stderr: true }))),

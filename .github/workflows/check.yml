@@ -22,19 +22,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install dependencies
         uses: ./.github/actions/setup
-      - run: pnpm codegen
+      - run: pnpm build
       - name: Check source state
         run: git add src && git diff-index --cached HEAD --exit-code src
-
-  types:
-    name: Types
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        uses: ./.github/actions/setup
-      - run: pnpm check
 
   lint:
     name: Lint
