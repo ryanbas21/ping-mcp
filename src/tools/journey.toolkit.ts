@@ -50,9 +50,12 @@ const ExportJourney = AiTool.make('export_journey', {
 });
 
 const ListJourneyTool = AiTool.make('list_journey', {
-  description: 'Create a new OAuth app for PingOne',
+  description: 'List all journeys',
   success: Schema.Any,
   failure: FailedToGetJourneys,
+  parameters: {
+    realm: Schema.optional(Schema.String),
+  },
 });
 
 const GetJourney = AiTool.make('get_journey', {

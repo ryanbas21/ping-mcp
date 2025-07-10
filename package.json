@@ -18,7 +18,8 @@
   "scripts": {
     "build": "tsup && tsx ./scripts/copy-packagejson.ts",
     "dev": "tsx --watch src/main.ts",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "scratchpad": "tsx ./scratchpad/main.ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
