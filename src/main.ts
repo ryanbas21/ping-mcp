@@ -18,7 +18,11 @@ import { JourneyToolkit, JourneyTools } from './tools/journey.toolkit.js';
 import { Frodo } from './services/Frodo.js';
 import { RealmToolkit, RealmsTools } from './tools/realm.toolkit.js';
 import { UsersToolkit, UsersTools } from './tools/users.toolkit.js';
-import { CreateConfigToolKit, CreateConfigTools } from './tools/config.toolkit.js';
+import {
+  CreateConfigToolKit,
+  CreateConfigTools,
+} from './tools/config.toolkit.js';
+import { DeviceToolkit, DevicesTools } from './tools/devices.toolkit.js';
 
 export const Journey = McpServer.toolkit(JourneyToolkit).pipe(
   Layer.provide(JourneyTools),
@@ -33,19 +37,23 @@ export const Config = McpServer.toolkit(CreateConfigToolKit).pipe(
   Layer.provide(CreateConfigTools),
 );
 
+export const Devices = McpServer.toolkit(DeviceToolkit).pipe(
+  Layer.provide(DevicesTools),
+);
+
 export const PingSDKMcpServer = McpServer.layerStdio({
   name: 'ping-sdk-mcp',
   version: '1.0.0',
   stdin: NodeStream.stdin,
   stdout: NodeSink.stdout,
 }).pipe(
-
   // Toolkits
   Layer.provide(Journey),
   Layer.provide(Readmes),
   Layer.provide(Realms),
   Layer.provide(Users),
   Layer.provide(Config),
+  Layer.provide(Devices),
 
   // Services
   Layer.provide(DocsCache.Default),
