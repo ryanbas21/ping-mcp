@@ -1,7 +1,8 @@
 import 'dotenv/config';
-import { Effect } from 'effect';
+import { Config, Effect, Layer } from 'effect';
 import { Frodo } from '../src/services/Frodo.js';
-import { FailedToCreateRealm } from '../src/tools/journey.toolkit.errors';
+import { HttpClient, HttpClientRequest } from '@effect/platform';
+import { NodeHttpClient } from '@effect/platform-node';
 
 const getTokens = Effect.gen(function* () {
   const frodo = yield* Frodo;
@@ -11,47 +12,52 @@ const getTokens = Effect.gen(function* () {
   });
 });
 
-const createRealm = Effect.fn(function* (name: string) {
+const getPlatformInfo = Effect.gen(function* () {
   const frodo = yield* Frodo;
-  yield* Effect.tryPromise({
-    try: () =>
-      frodo.realm.createRealm(name, {
-        description: 'test realm',
-        active: true,
-        parentPath: '/',
-        aliases: [],
-        name,
-      }),
-    catch: (error: unknown) =>
-      new FailedToCreateRealm({
-        message: error instanceof Error ? error.message : 'unknown error',
-        cause: error,
-      }),
+  return yield* Effect.tryPromise({
+    try: () => frodo.info.getInfo(),
+    catch: () => new Error('failure logging in'),
   });
 });
 
-const deleteRealm = Effect.fn(function* (name: string) {
-  const frodo = yield* Frodo;
-  yield* Effect.tryPromise({
-    try: () => frodo.realm.deleteRealm(name),
-    catch: (error: unknown) =>
-      new FailedToCreateRealm({
-        message: error instanceof Error ? error.message : 'unknown error',
-        cause: error,
-      }),
+const getWebAuthnDevice = (
+  session: string,
+  user: string,
+  cookieName: string,
+  realm: string = 'alpha',
+) =>
+  Effect.gen(function* () {
+    const base_url = yield* Config.string('AM_URL');
+    const client = yield* HttpClient.HttpClient;
+    const request = HttpClientRequest.get(base_url).pipe(
+      HttpClientRequest.appendUrl(
+        `/json/realms/root/realms/${realm}/users/${user}/devices/2fa/webauthn?_prettyPrint=true&_queryFilter=true`,
+      ),
+      HttpClientRequest.acceptJson,
+      HttpClientRequest.setHeader('Accept-API-Version', 'resource=1.0'),
+      HttpClientRequest.setHeader(cookieName, session), // header name?
+    );
+
+    const response = yield* client.execute(request);
+
+    return yield* response.json;
   });
-});
 
 const program = Effect.gen(function* () {
   const tokens = yield* getTokens;
   console.log('tokens', tokens);
 
-  const realm = yield* createRealm('test-realm');
-  console.log('realm', realm);
+  const session = tokens?.userSessionToken?.tokenId || '';
+  const user = 'demo';
 
-  // yield* deleteRealm('test-realm');
+  const platformInfo = yield* getPlatformInfo;
+  const cookieName = platformInfo.cookieName;
+  const webAuthDevice = yield* getWebAuthnDevice(session, user, cookieName);
+  console.log('webAuthDevice', webAuthDevice);
 });
 
-const eff = program.pipe(Effect.provide(Frodo.Default));
+const eff = program.pipe(
+  Effect.provide(Layer.mergeAll(NodeHttpClient.layer, Frodo.Default)),
+);
 
 Effect.runPromise(eff);

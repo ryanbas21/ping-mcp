@@ -12,12 +12,18 @@ import { Layer, Logger } from 'effect';
 import { Markdown } from './services/Markdown.js';
 import { DocsCache } from './services/DocsCache.js';
 import { Readmes } from './resources.js';
+
 import { SiteMapperService } from './services/SiteMapper.js';
 import { JourneyToolkit, JourneyTools } from './tools/journey.toolkit.js';
 import { Frodo } from './services/Frodo.js';
 import { RealmToolkit, RealmsTools } from './tools/realm.toolkit.js';
 import { UsersToolkit, UsersTools } from './tools/users.toolkit.js';
 import { LogsToolkit, LogsTools } from './tools/logs.toolkit.js';
+import {
+  CreateConfigToolKit,
+  CreateConfigTools,
+} from './tools/config.toolkit.js';
+import { DeviceToolkit, DevicesTools } from './tools/devices.toolkit.js';
 
 export const Logs = McpServer.toolkit(LogsToolkit).pipe(
   Layer.provide(LogsTools),
@@ -30,6 +36,13 @@ export const Realms = McpServer.toolkit(RealmToolkit).pipe(
 );
 export const Users = McpServer.toolkit(UsersToolkit).pipe(
   Layer.provide(UsersTools),
+);
+export const Config = McpServer.toolkit(CreateConfigToolKit).pipe(
+  Layer.provide(CreateConfigTools),
+);
+
+export const Devices = McpServer.toolkit(DeviceToolkit).pipe(
+  Layer.provide(DevicesTools),
 );
 
 export const PingSDKMcpServer = McpServer.layerStdio({
@@ -44,6 +57,8 @@ export const PingSDKMcpServer = McpServer.layerStdio({
   Layer.provide(Realms),
   Layer.provide(Users),
   Layer.provide(Logs),
+  Layer.provide(Config),
+  Layer.provide(Devices),
 
   // Services
   Layer.provide(DocsCache.Default),

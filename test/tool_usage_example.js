@@ -71,6 +71,28 @@ mcp.stdout.on('data', data => {
           });
         }, 1000);
 
+        // Test create config tool
+        setTimeout(() => {
+          sendRequest('tools/call', {
+            name: 'generate_js_config',
+            arguments: {"clientId": "ThaisPublicSDKClient" },
+          });
+        }, 1000);
+
+        setTimeout(() => {
+          sendRequest('tools/call', {
+            name: 'generate_android_config',
+            arguments: {"clientId": "ThaisPublicSDKClient" },
+          });
+        }, 1000);
+
+        setTimeout(() => {
+          sendRequest('tools/call', {
+            name: 'generate_ios_config',
+            arguments: {"clientId": "ThaisPublicSDKClient" },
+          });
+        }, 1000);
+
         // // Test get_ping_doc tool (get document ID 0)
         // setTimeout(() => {
         //   sendRequest('tools/call', {

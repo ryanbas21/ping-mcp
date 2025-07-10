@@ -20,7 +20,8 @@
     "dev": "tsx --watch src/main.ts",
     "lint": "eslint .",
     "test": "vitest",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "scratchpad": "tsx ./scratchpad/main.ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
@@ -62,14 +63,13 @@
     "tsup": "^8.5.0",
     "tsx": "^4.17.0",
     "typescript": "^5.6.2",
-    "unified": "^11.0.5",
-    "vitest": "^3.2.4"
+    "vitest": "^2.0.5"
   },
   "dependencies": {
     "@rockcarver/frodo-lib": "^3.3.0",
-    "dotenv": "^17.2.0",
-    "frodo-lib": "^2.4.1",
     "pkg-pr-new": "^0.0.54",
-    "sitemapper": "^4.0.2"
+    "publish": "^0.6.0",
+    "sitemapper": "^4.0.2",
+    "unified": "^11.0.5"
   }
 }
