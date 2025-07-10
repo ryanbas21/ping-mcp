@@ -17,7 +17,11 @@ import { JourneyToolkit, JourneyTools } from './tools/journey.toolkit.js';
 import { Frodo } from './services/Frodo.js';
 import { RealmToolkit, RealmsTools } from './tools/realm.toolkit.js';
 import { UsersToolkit, UsersTools } from './tools/users.toolkit.js';
+import { LogsToolkit, LogsTools } from './tools/logs.toolkit.js';
 
+export const Logs = McpServer.toolkit(LogsToolkit).pipe(
+  Layer.provide(LogsTools),
+);
 export const Journey = McpServer.toolkit(JourneyToolkit).pipe(
   Layer.provide(JourneyTools),
 );
@@ -39,6 +43,7 @@ export const PingSDKMcpServer = McpServer.layerStdio({
   Layer.provide(Readmes),
   Layer.provide(Realms),
   Layer.provide(Users),
+  Layer.provide(Logs),
 
   // Services
   Layer.provide(DocsCache.Default),
