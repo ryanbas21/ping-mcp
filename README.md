@@ -27,3 +27,21 @@ npm install ... [package not published yet]
         }
     }
 ```
+
+## API
+
+| Tool Name               | Description                                | Parameters                    |
+| ----------------------- | ------------------------------------------ | ----------------------------- |
+| generate_js_config      | Generate OAuth2 client config for JS SDK   | clientId, realm?              |
+| generate_android_config | Generate config for Ping SDK for Android   | clientId, realm?              |
+| generate_ios_config     | Generate config for Ping SDK for iOS       | clientId, realm?              |
+| list_journey            | List all journeys (OAuth apps for PingOne) | –                             |
+| get_journey             | Get information about a journey            | journeyId                     |
+| export_journey          | Export a journey                           | journeyId                     |
+| delete_journey          | Delete a journey                           | journeyId                     |
+| update_journey          | Update a journey                           | journeyId, entryNodeId, nodes |
+| get_webauthn_device     | Get a user's WebAuthn device               | realm, user                   |
+| create_user             | Create a new user                          | email, password, username     |
+| create_realm            | Create a new realm                         | name                          |
+| read_realm_by_name      | Read a realm by its name                   | name                          |
+| read_users              | Read a user by name                        | name                          |
