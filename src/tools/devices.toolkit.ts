@@ -33,6 +33,7 @@ export const DevicesTools = pipe(
       return DeviceToolkit.of({
         get_webauthn_device: ({ realm = 'alpha', user = 'demo' }) =>
           Effect.gen(function* () {
+            if (realm.startsWith('/')) realm = realm.slice(1);
             const request = HttpClientRequest.get(base_url).pipe(
               HttpClientRequest.appendUrl(
                 `/json/realms/root/realms/${realm}/users/${user}/devices/2fa/webauthn?_prettyPrint=true&_queryFilter=true`,
