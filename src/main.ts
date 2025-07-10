@@ -18,7 +18,7 @@ import { JourneyToolkit, JourneyTools } from './tools/journey.toolkit.js';
 import { Frodo } from './services/Frodo.js';
 import { RealmToolkit, RealmsTools } from './tools/realm.toolkit.js';
 import { UsersToolkit, UsersTools } from './tools/users.toolkit.js';
-import { GetOAuthClientToolkit, OAuthClientTools } from './tools/create-config-app.js';
+import { CreateConfigToolKit, CreateConfigTools } from './tools/config.toolkit.js';
 
 export const Journey = McpServer.toolkit(JourneyToolkit).pipe(
   Layer.provide(JourneyTools),
@@ -29,8 +29,8 @@ export const Realms = McpServer.toolkit(RealmToolkit).pipe(
 export const Users = McpServer.toolkit(UsersToolkit).pipe(
   Layer.provide(UsersTools),
 );
-export const Config = McpServer.toolkit(GetOAuthClientToolkit).pipe(
-  Layer.provide(OAuthClientTools),
+export const Config = McpServer.toolkit(CreateConfigToolKit).pipe(
+  Layer.provide(CreateConfigTools),
 );
 
 export const PingSDKMcpServer = McpServer.layerStdio({
@@ -45,6 +45,7 @@ export const PingSDKMcpServer = McpServer.layerStdio({
   Layer.provide(Readmes),
   Layer.provide(Realms),
   Layer.provide(Users),
+  Layer.provide(Config),
 
   // Services
   Layer.provide(DocsCache.Default),
