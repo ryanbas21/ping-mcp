@@ -9,7 +9,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install pnpm
+    - name: Install pnpm 
       uses: pnpm/action-setup@v3
     - name: Install node
       uses: actions/setup-node@v4
