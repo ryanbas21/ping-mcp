@@ -34,7 +34,7 @@ export const LogsTools = pipe(
             return yield* Effect.tryPromise({
               try: async () => {
                 const response = await fetch(
-                  `${LOGS_API_URL}?source=am-access&_pageSize=10&_prettyPrint=true&transactionId=${encodeURIComponent(
+                  `${LOGS_API_URL}?source=am-everything&_pageSize=10&_prettyPrint=true&transactionId=${encodeURIComponent(
                     transactionId
                   )}`,
                   {
@@ -67,7 +67,7 @@ export const LogsTools = pipe(
 // Standalone function for CLI/script usage
 export async function fetchLogs(transactionId: string) {
   const response = await fetch(
-    `${LOGS_API_URL}?source=am-access&_pageSize=10&_prettyPrint=true&transactionId=${encodeURIComponent(transactionId)}`,
+    `${LOGS_API_URL}?source=am-everything&_pageSize=10&_prettyPrint=true&transactionId=${encodeURIComponent(transactionId)}`,
     {
       headers: {
         'x-api-key': LOGS_API_KEY ?? (() => { throw new Error('Missing LOGS_API_KEY env variable'); })(),
