@@ -31,7 +31,7 @@ export const UsersTools = pipe(
       return UsersToolkit.of({
         read_users: ({ name }: { name: string }) =>
           Effect.gen(function* () {
-            yield* Effect.tryPromise({
+            const value = yield* Effect.tryPromise({
               try: () => frodo.user.readUser(name),
               catch: (error: unknown) =>
                 new FailedToCreateUser({
@@ -40,6 +40,7 @@ export const UsersTools = pipe(
                   cause: error,
                 }),
             });
+            return value;
           }),
       });
     }),
