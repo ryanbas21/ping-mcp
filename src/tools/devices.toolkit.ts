@@ -14,6 +14,10 @@ const GetWebAuthnDevice = AiTool.make('get_webauthn_device', {
   description: 'Get a webauthn device',
   success: Schema.Any,
   failure: Schema.Any,
+  parameters: {
+    realm: Schema.String,
+    user: Schema.String,
+  },
 });
 
 export const DeviceToolkit = AiToolkit.make(GetWebAuthnDevice);
@@ -27,11 +31,11 @@ export const DevicesTools = pipe(
       const { cookieName } = yield* getPlatformInfo;
 
       return DeviceToolkit.of({
-        get_webauthn_device: () =>
+        get_webauthn_device: ({ realm = 'alpha', user = 'demo' }) =>
           Effect.gen(function* () {
             const request = HttpClientRequest.get(base_url).pipe(
               HttpClientRequest.appendUrl(
-                `/json/realms/root/realms/alpha/users/demo/devices/2fa/webauthn?_prettyPrint=true&_queryFilter=true`,
+                `/json/realms/root/realms/${realm}/users/${user}/devices/2fa/webauthn?_prettyPrint=true&_queryFilter=true`,
               ),
               HttpClientRequest.acceptJson,
               HttpClientRequest.setHeader('Accept-API-Version', 'resource=1.0'),

@@ -1,9 +1,7 @@
 import { AiToolkit, AiTool } from '@effect/ai';
-//import type { Record } from 'effect';
 import { Effect, pipe, Schema } from 'effect';
 import { Frodo } from '../services/Frodo';
-// import { error } from 'console';
-//import { Login } from './utils/login.js';
+import { Login } from './utils/login';
 
 export class FailedToGetOAuth2Client extends Schema.TaggedError<FailedToGetOAuth2Client>()(
   'FailedToGetOAuth2Client',
@@ -21,7 +19,7 @@ export class FailedToGetBaseUrl extends Schema.TaggedError<FailedToGetBaseUrl>()
 
 const JSConfigOutput = Schema.Struct({
   serverConfig: Schema.Struct({
-    wellknown: Schema.String
+    wellknown: Schema.String,
   }),
   clientId: Schema.Any,
   scope: Schema.String,
@@ -81,21 +79,23 @@ const GenerateIOSConfig = AiTool.make('generate_ios_config', {
 export const CreateConfigToolKit = AiToolkit.make(
   GenerateJSConfig,
   GenerateAndroidConfig,
-  GenerateIOSConfig
+  GenerateIOSConfig,
 );
 
 export const CreateConfigTools = pipe(
   CreateConfigToolKit.toLayer(
     Effect.gen(function* () {
+      yield* Login;
       const frodo = yield* Frodo;
 
-      const common = ({ clientId, realm }: { clientId: string; realm: string }) =>
+      const common = ({
+        clientId,
+        realm,
+      }: {
+        clientId: string;
+        realm: string;
+      }) =>
         Effect.gen(function* () {
-          yield* Effect.tryPromise({
-            try: () => frodo.login.getTokens(),
-            catch: error => new FailedToGetOAuth2Client({ error }),
-          });
-
           const host = yield* Effect.tryPromise({
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
@@ -106,7 +106,7 @@ export const CreateConfigTools = pipe(
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
 
-          const pltaformInfo = yield* Effect.tryPromise({
+          const platformInfo = yield* Effect.tryPromise({
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
@@ -114,27 +114,34 @@ export const CreateConfigTools = pipe(
           return {
             host,
             realm: realm as string,
-            scopes: (client.coreOAuth2ClientConfig?.scopes as { value: string[] }).value.join(' '),
-            redirectUri: (client.coreOAuth2ClientConfig?.redirectionUris as { value: string[] }).value[0],
-            tree: (client.advancedOAuth2ClientConfig?.treeName as { value: string }).value,
-            cookieName: pltaformInfo.cookieName, // Default value if not provided
+            scopes: (
+              client.coreOAuth2ClientConfig?.scopes as { value: Array<string> }
+            ).value.join(' '),
+            redirectUri: (
+              client.coreOAuth2ClientConfig?.redirectionUris as {
+                value: Array<string>;
+              }
+            ).value[0],
+            tree: (
+              client.advancedOAuth2ClientConfig?.treeName as { value: string }
+            ).value,
+            cookieName: platformInfo.cookieName, // Default value if not provided
           };
         });
 
       return CreateConfigToolKit.of({
-        // existing JS output
         generate_js_config: ({ clientId, realm = 'alpha' }) =>
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
-              serverConfig: { wellknown: `${c.host}/oauth2/${realm}/.well-known/openid-configuration` },
+              serverConfig: {
+                wellknown: `${c.host}/oauth2/${realm}/.well-known/openid-configuration`,
+              },
               clientId,
               scope: c.scopes,
               redirectUri: c.redirectUri,
               tree: c.tree,
             })),
           ),
-
-        // new Android output
         generate_android_config: ({ clientId, realm = 'alpha' }) =>
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
@@ -146,21 +153,19 @@ export const CreateConfigTools = pipe(
               serviceName: c.tree,
             })),
           ),
-          generate_ios_config: ({ clientId, realm = 'alpha' }) =>
-            common({ clientId, realm }).pipe(
-              Effect.map(c => ({
-                discoveryEndpoint: `${c.host}/oauth2/${realm}/.well-known/openid-configuration`,
-                cookie: c.cookieName,
-                realm,
-                clientId,
-                scopes: c.scopes,
-                serviceName: 'Login',
-                registrationServiceName: 'Register', 
-              })),
-            ),
+        generate_ios_config: ({ clientId, realm = 'alpha' }) =>
+          common({ clientId, realm }).pipe(
+            Effect.map(c => ({
+              discoveryEndpoint: `${c.host}/oauth2/${realm}/.well-known/openid-configuration`,
+              cookie: c.cookieName,
+              realm,
+              clientId,
+              scopes: c.scopes,
+              serviceName: 'Login',
+              registrationServiceName: 'Register',
+            })),
+          ),
       });
     }),
   ),
 );
-
-
