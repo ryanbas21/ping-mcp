@@ -18,32 +18,39 @@ export class FailedToGetBaseUrl extends Schema.TaggedError<FailedToGetBaseUrl>()
 ) {}
 
 const JSConfigOutput = Schema.Struct({
-  serverConfig: Schema.Struct({
-    wellknown: Schema.String,
+  timeout: Schema.Number,
+  logger: Schema.Any,
+  realm: Schema.String,
+  cookie: Schema.String,
+  module: Schema.Struct({
+    clientId: Schema.String,
+    scopes: Schema.String,
+    redirectUri: Schema.String,
   }),
-  clientId: Schema.Any,
-  scope: Schema.String,
-  redirectUri: Schema.String,
-  tree: Schema.String,
 });
 
 const AndroidConfigOutput = Schema.Struct({
-  discoveryEndpoint: Schema.String,
+  timeout: Schema.Number,
+  logger: Schema.Any,
   realm: Schema.String,
-  clientId: Schema.String,
-  scopes: Schema.String,
-  redirectUri: Schema.String,
-  serviceName: Schema.String,
+  cookie: Schema.String,
+  module: Schema.Struct({
+    clientId: Schema.String,
+    scopes: Schema.String,
+    redirectUri: Schema.String,
+  }),
 });
 
 const IOSConfigOutput = Schema.Struct({
-  discoveryEndpoint: Schema.String,
-  cookie: Schema.String,
+  timeout: Schema.Number,
+  logger: Schema.Any,
   realm: Schema.String,
-  clientId: Schema.String,
-  scopes: Schema.String,
-  serviceName: Schema.String,
-  registrationServiceName: Schema.String,
+  cookie: Schema.String,
+  module: Schema.Struct({
+    clientId: Schema.String,
+    scopes: Schema.String,
+    redirectUri: Schema.String,
+  }),
 });
 
 const GenerateJSConfig = AiTool.make('generate_js_config', {
@@ -110,6 +117,8 @@ export const CreateConfigTools = pipe(
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
+          
+
 
           return {
             host,
@@ -133,38 +142,45 @@ export const CreateConfigTools = pipe(
         generate_js_config: ({ clientId, realm = 'alpha' }) =>
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
-              serverConfig: {
-                wellknown: `${c.host}/oauth2/${realm}/.well-known/openid-configuration`,
+              timeout: 30,
+              logger: 'Logger.STANDARD',
+              realm,
+              cookie: c.cookieName,
+              module: {
+                clientId,
+                scopes: c.scopes,
+                redirectUri: c.redirectUri,
               },
-              clientId,
-              scope: c.scopes,
-              redirectUri: c.redirectUri,
-              tree: c.tree,
             })),
           ),
         generate_android_config: ({ clientId, realm = 'alpha' }) =>
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
-              discoveryEndpoint: `${c.host}/oauth2/${realm}/.well-known/openid-configuration`,
+              timeout: 30,
+              logger: 'Logger.STANDARD',
               realm,
-              clientId,
-              scopes: c.scopes,
-              redirectUri: c.redirectUri,
-              serviceName: c.tree,
-            })),
-          ),
-        generate_ios_config: ({ clientId, realm = 'alpha' }) =>
-          common({ clientId, realm }).pipe(
-            Effect.map(c => ({
-              discoveryEndpoint: `${c.host}/oauth2/${realm}/.well-known/openid-configuration`,
               cookie: c.cookieName,
-              realm,
-              clientId,
-              scopes: c.scopes,
-              serviceName: 'Login',
-              registrationServiceName: 'Register',
+              module: {
+                clientId,
+                scopes: c.scopes,
+                redirectUri: c.redirectUri,
+              },
             })),
           ),
+          generate_ios_config: ({ clientId, realm = 'alpha' }) =>
+            common({ clientId, realm }).pipe(
+              Effect.map(c => ({
+                timeout: 30,
+                logger: 'Logger.STANDARD',
+                realm,
+                cookie: c.cookieName,
+                module: {
+                  clientId,
+                  scopes: c.scopes,
+                  redirectUri: c.redirectUri,
+                },
+              })),
+            ),
       });
     }),
   ),
