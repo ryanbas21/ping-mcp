@@ -18,20 +18,20 @@ export class FailedToGetBaseUrl extends Schema.TaggedError<FailedToGetBaseUrl>()
 ) {}
 
 const JSConfigOutput = Schema.Struct({
-  timeout: Schema.Number,
-  logger: Schema.Any,
-  realm: Schema.String,
-  cookie: Schema.String,
-  module: Schema.Struct({
-    clientId: Schema.String,
-    scopes: Schema.String,
-    redirectUri: Schema.String,
+  timeout: Schema.optional(Schema.Number),
+  logger: Schema.optional(Schema.Any),
+  realm: Schema.optional(Schema.String),
+  clientId: Schema.String,
+  scopes: Schema.optional(Schema.String),
+  redirectUri: Schema.optional(Schema.String),
+  serverConfig: Schema.Struct({
+    wellknown: Schema.String,
   }),
 });
 
 const AndroidConfigOutput = Schema.Struct({
-  timeout: Schema.Number,
-  logger: Schema.Any,
+  timeout: Schema.optional(Schema.Number),
+  logger: Schema.optional(Schema.Any),
   realm: Schema.String,
   cookie: Schema.String,
   module: Schema.Struct({
@@ -117,8 +117,6 @@ export const CreateConfigTools = pipe(
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
-          
-
 
           return {
             host,
@@ -164,20 +162,20 @@ export const CreateConfigTools = pipe(
               },
             })),
           ),
-          generate_ios_config: ({ clientId, realm = 'alpha' }) =>
-            common({ clientId, realm }).pipe(
-              Effect.map(c => ({
-                timeout: 30,
-                logger: 'Logger.STANDARD',
-                realm,
-                cookie: c.cookieName,
-                module: {
-                  clientId,
-                  scopes: c.scopes,
-                  redirectUri: c.redirectUri,
-                },
-              })),
-            ),
+        generate_ios_config: ({ clientId, realm = 'alpha' }) =>
+          common({ clientId, realm }).pipe(
+            Effect.map(c => ({
+              timeout: 30,
+              logger: 'Logger.STANDARD',
+              realm,
+              cookie: c.cookieName,
+              module: {
+                clientId,
+                scopes: c.scopes,
+                redirectUri: c.redirectUri,
+              },
+            })),
+          ),
       });
     }),
   ),
