@@ -131,9 +131,6 @@ export const CreateConfigTools = pipe(
                 value: Array<string>;
               }
             ).value[0],
-            tree: (
-              client.advancedOAuth2ClientConfig?.treeName as { value: string }
-            ).value,
             cookieName: platformInfo.cookieName, // Default value if not provided
           };
         });
