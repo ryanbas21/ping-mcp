@@ -103,9 +103,6 @@ export const CreateConfigTools = pipe(
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
 
-          console.log('clientId', clientId);
-          console.log('realm', realm);
-
           const host = yield* Effect.tryPromise({
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
