@@ -67,6 +67,7 @@
   },
   "dependencies": {
     "@rockcarver/frodo-lib": "^3.3.0",
+    "dotenv": "^17.2.0",
     "pkg-pr-new": "^0.0.54",
     "publish": "^0.6.0",
     "sitemapper": "^4.0.2",
