@@ -19,6 +19,7 @@ const CreateUser = AiTool.make('create_user', {
     username: Schema.String,
     password: Schema.String,
     email: Schema.String,
+    realm: Schema.optional(Schema.String),
   },
 });
 
@@ -30,14 +31,14 @@ export const IdmTools = pipe(
       yield* Login;
       const frodo = yield* Frodo;
       return IdmToolkit.of({
-        create_user: ({ email, password, username }) =>
+        create_user: ({ email, password, realm = 'alpha', username }) =>
           Effect.gen(function* () {
             const value = yield* Effect.tryPromise({
               try: () =>
-                frodo.idm.managed.createManagedObject('managed_user', {
-                  username,
+                frodo.idm.managed.createManagedObject(`${realm}_user`, {
+                  userName: username,
                   password,
-                  email,
+                  mail: email,
                 }),
               catch: (error: unknown) =>
                 new FailedToGetIdmConfig({

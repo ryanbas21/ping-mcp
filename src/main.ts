@@ -24,6 +24,7 @@ import {
   CreateConfigTools,
 } from './tools/config.toolkit.js';
 import { DeviceToolkit, DevicesTools } from './tools/devices.toolkit.js';
+import { IdmToolkit, IdmTools } from './tools/idm.toolkit.js';
 
 export const Logs = McpServer.toolkit(LogsToolkit).pipe(
   Layer.provide(LogsTools),
@@ -45,6 +46,8 @@ export const Devices = McpServer.toolkit(DeviceToolkit).pipe(
   Layer.provide(DevicesTools),
 );
 
+export const IDM = McpServer.toolkit(IdmToolkit).pipe(Layer.provide(IdmTools));
+
 export const PingSDKMcpServer = McpServer.layerStdio({
   name: 'ping-sdk-mcp',
   version: '1.0.0',
@@ -59,6 +62,7 @@ export const PingSDKMcpServer = McpServer.layerStdio({
   Layer.provide(Logs),
   Layer.provide(Config),
   Layer.provide(Devices),
+  Layer.provide(IDM),
 
   // Services
   Layer.provide(DocsCache.Default),
