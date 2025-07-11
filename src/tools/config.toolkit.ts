@@ -1,9 +1,7 @@
 import { AiToolkit, AiTool } from '@effect/ai';
-//import type { Record } from 'effect';
 import { Effect, pipe, Schema } from 'effect';
 import { Frodo } from '../services/Frodo';
-// import { error } from 'console';
-//import { Login } from './utils/login.js';
+import { Login } from './utils/login';
 
 export class FailedToGetOAuth2Client extends Schema.TaggedError<FailedToGetOAuth2Client>()(
   'FailedToGetOAuth2Client',
@@ -88,21 +86,23 @@ const GenerateIOSConfig = AiTool.make('generate_ios_config', {
 export const CreateConfigToolKit = AiToolkit.make(
   GenerateJSConfig,
   GenerateAndroidConfig,
-  GenerateIOSConfig
+  GenerateIOSConfig,
 );
 
 export const CreateConfigTools = pipe(
   CreateConfigToolKit.toLayer(
     Effect.gen(function* () {
+      yield* Login;
       const frodo = yield* Frodo;
 
-      const common = ({ clientId, realm }: { clientId: string; realm: string }) =>
+      const common = ({
+        clientId,
+        realm,
+      }: {
+        clientId: string;
+        realm: string;
+      }) =>
         Effect.gen(function* () {
-          yield* Effect.tryPromise({
-            try: () => frodo.login.getTokens(),
-            catch: error => new FailedToGetOAuth2Client({ error }),
-          });
-
           const host = yield* Effect.tryPromise({
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
@@ -113,7 +113,7 @@ export const CreateConfigTools = pipe(
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
 
-          const pltaformInfo = yield* Effect.tryPromise({
+          const platformInfo = yield* Effect.tryPromise({
             try: () => frodo.info.getInfo(),
             catch: error => new FailedToGetOAuth2Client({ error }),
           });
@@ -123,14 +123,22 @@ export const CreateConfigTools = pipe(
           return {
             host,
             realm: realm as string,
-            scopes: (client.coreOAuth2ClientConfig?.scopes as { value: string[] }).value.join(' '),
-            redirectUri: (client.coreOAuth2ClientConfig?.redirectionUris as { value: string[] }).value[0],
-            cookieName: pltaformInfo.cookieName, // Default value if not provided
+            scopes: (
+              client.coreOAuth2ClientConfig?.scopes as { value: Array<string> }
+            ).value.join(' '),
+            redirectUri: (
+              client.coreOAuth2ClientConfig?.redirectionUris as {
+                value: Array<string>;
+              }
+            ).value[0],
+            tree: (
+              client.advancedOAuth2ClientConfig?.treeName as { value: string }
+            ).value,
+            cookieName: platformInfo.cookieName, // Default value if not provided
           };
         });
 
       return CreateConfigToolKit.of({
-        // existing JS output
         generate_js_config: ({ clientId, realm = 'alpha' }) =>
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
@@ -145,8 +153,6 @@ export const CreateConfigTools = pipe(
               },
             })),
           ),
-
-        // new Android output
         generate_android_config: ({ clientId, realm = 'alpha' }) =>
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
@@ -179,5 +185,3 @@ export const CreateConfigTools = pipe(
     }),
   ),
 );
-
-

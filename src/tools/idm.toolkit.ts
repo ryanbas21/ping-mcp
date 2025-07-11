@@ -3,38 +3,44 @@ import { Effect, pipe, Schema } from 'effect';
 import { Frodo } from '../services/Frodo';
 import { Login } from './utils/login.js';
 
-export class FailedToCreateUser extends Schema.TaggedError<FailedToCreateUser>()(
-  'FailedToCreateUser',
+export class FailedToGetIdmConfig extends Schema.TaggedError<FailedToGetIdmConfig>()(
+  'FailedToGetIdmConfig',
   {
     message: Schema.String,
     cause: Schema.Any,
   },
 ) {}
 
-const ReadUsers = AiTool.make('read_users', {
-  description: 'Read a user',
+const CreateUser = AiTool.make('create_user', {
+  description: 'create a new user',
   success: Schema.Any,
-  failure: FailedToCreateUser,
+  failure: FailedToGetIdmConfig,
   parameters: {
-    name: Schema.String,
+    username: Schema.String,
+    password: Schema.String,
+    email: Schema.String,
   },
 });
 
-export const UsersToolkit = AiToolkit.make(ReadUsers);
+export const IdmToolkit = AiToolkit.make(CreateUser);
 
-export const UsersTools = pipe(
-  UsersToolkit.toLayer(
+export const IdmTools = pipe(
+  IdmToolkit.toLayer(
     Effect.gen(function* () {
       yield* Login;
-
       const frodo = yield* Frodo;
-      return UsersToolkit.of({
-        read_users: ({ name }: { name: string }) =>
+      return IdmToolkit.of({
+        create_user: ({ email, password, username }) =>
           Effect.gen(function* () {
             const value = yield* Effect.tryPromise({
-              try: () => frodo.user.readUser(name),
+              try: () =>
+                frodo.idm.managed.createManagedObject('managed_user', {
+                  username,
+                  password,
+                  email,
+                }),
               catch: (error: unknown) =>
-                new FailedToCreateUser({
+                new FailedToGetIdmConfig({
                   message:
                     error instanceof Error ? error.message : 'unknown error',
                   cause: error,
