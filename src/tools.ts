@@ -8,7 +8,11 @@ import { GetPingDocTool, PingDocSearchTool } from './pingDocSearchTool.js';
 import type { DocumentEntry } from './types.js';
 import { Markdown } from './services/Markdown.js';
 
-export const Toolkit = AiToolkit.make(PingDocSearchTool, GetPingDocTool);
+
+export const Toolkit = AiToolkit.make(
+  PingDocSearchTool,
+  GetPingDocTool,
+);
 
 export const ToolkitLayer = pipe(
   Toolkit.toLayer(

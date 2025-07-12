@@ -1,12 +1,11 @@
-import { Effect } from 'effect';
+import type { Effect } from 'effect';
 
-// Document Entry Schema
 export interface DocumentEntry {
   id: number;
   title: string;
   description: string;
   content: Effect.Effect<string>;
-  source: "readme" | "api-docs" | "sample" | "tutorial" | string;
+  source: 'readme' | 'api-docs' | 'sample' | 'tutorial' | string;
   package?: string;
   url: string;
 }

@@ -1,26 +1,32 @@
 {
   "name": "ping-mcp",
   "version": "0.0.1",
-  "type": "module",
   "packageManager": "pnpm@9.10.0",
   "license": "MIT",
   "description": "Ping Identity MCP Server",
+  "files": [
+    "dist/*",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "repository": {
     "type": "git",
-    "url": "<PLACEHOLDER>"
+    "url": "https://github.com/ryanbas21/ping-mcp"
   },
   "publishConfig": {
-    "registry": "https://npm.petrov.ca",
     "access": "public",
     "directory": "dist"
   },
   "bin": {
-    "ping-mcp": "./dist/main.cjs"
+    "ping-mcp": "./dist/main.js"
   },
   "scripts": {
-    "build": "tsup && tsx ./scripts/copy-packagejson.ts",
+    "build": "tsup",
     "dev": "tsx --watch src/main.ts",
-    "prepublishOnly": "pnpm build"
+    "lint": "eslint .",
+    "test": "vitest",
+    "prepublishOnly": "pnpm build",
+    "scratchpad": "tsx ./scratchpad/main.ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
@@ -29,30 +35,30 @@
     "@babel/plugin-transform-modules-commonjs": "^7.24.8",
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.8",
+    "@effect/ai": "^0.18.16",
     "@effect/build-utils": "^0.7.7",
     "@effect/eslint-plugin": "^0.2.0",
     "@effect/language-service": "^0.23.0",
+    "@effect/platform": "^0.84.11",
+    "@effect/platform-node": "^0.85.16",
     "@effect/vitest": "latest",
     "@eslint/compat": "1.1.1",
     "@eslint/eslintrc": "3.1.0",
     "@eslint/js": "9.10.0",
     "@swc/core": "^1.12.7",
+    "@types/node": "^24.0.1",
+    "@types/unist": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
     "@typescript-eslint/parser": "^8.4.0",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
+    "cheerio": "^1.1.0",
+    "effect": "^3.16.7",
     "eslint": "^9.10.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-codegen": "^0.28.0",
     "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-sort-destructure-keys": "^2.0.0",
-    "@effect/ai": "^0.18.16",
-    "@effect/platform": "^0.84.11",
-    "@effect/platform-node": "^0.85.16",
-    "@types/node": "^24.0.1",
-    "@types/unist": "^3.0.3",
-    "cheerio": "^1.1.0",
-    "effect": "^3.16.7",
     "minisearch": "^7.1.2",
     "prettier": "^3.5.3",
     "remark-frontmatter": "^5.0.0",
@@ -61,8 +67,15 @@
     "remark-stringify": "^11.0.0",
     "tsup": "^8.5.0",
     "tsx": "^4.17.0",
-    "unified": "^11.0.5",
     "typescript": "^5.6.2",
     "vitest": "^2.0.5"
+  },
+  "dependencies": {
+    "@rockcarver/frodo-lib": "^3.3.0",
+    "dotenv": "^17.2.0",
+    "pkg-pr-new": "^0.0.54",
+    "publish": "^0.6.0",
+    "sitemapper": "^4.0.2",
+    "unified": "^11.0.5"
   }
 }
