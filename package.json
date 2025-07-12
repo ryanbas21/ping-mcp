@@ -1,6 +1,6 @@
 {
   "name": "ping-mcp",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "packageManager": "pnpm@9.10.0",
   "license": "MIT",
   "description": "Ping Identity MCP Server",
