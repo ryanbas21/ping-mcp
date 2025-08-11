@@ -10,7 +10,7 @@ permissions: {}
 jobs:
   snapshot:
     name: Snapshot
-    if: github.repository_owner == 'ryanbas21'
+    if: github.repository_owner == 'Effect-Ts'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -21,5 +21,4 @@ jobs:
         run: pnpm build
       - name: Create snapshot
         id: snapshot
-        run: pnpm pkg-pr-new publish --bin
-        
+        run: pnpx pkg-pr-new@0.0.24 publish --pnpm --comment=off

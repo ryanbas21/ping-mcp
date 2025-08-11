@@ -3,7 +3,6 @@ import { Array, Effect, Layer } from 'effect';
 
 import { pingReadmes } from './doc-urls.js';
 import { DocsCache } from './services/DocsCache.js';
-// import { Sitemap } from './resources/DocSite.js';
 
 export const Readmes = Layer.mergeAll(
   ...Array.map(pingReadmes, readme =>
@@ -19,5 +18,4 @@ export const Readmes = Layer.mergeAll(
       }),
     }),
   ),
-  // Layer.unwrapEffect(Sitemap),
 );

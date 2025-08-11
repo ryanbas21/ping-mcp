@@ -3,7 +3,7 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "ryanbas21/ping-mcp"
+      "repo": "<PLACEHOLDER>"
     }
   ],
   "commit": false,
