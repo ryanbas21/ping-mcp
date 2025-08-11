@@ -94,6 +94,7 @@ export const CreateConfigTools = pipe(
     Effect.gen(function* () {
       yield* Login;
       const frodo = yield* Frodo;
+
       const common = ({
         clientId,
         realm,
@@ -137,12 +138,13 @@ export const CreateConfigTools = pipe(
           common({ clientId, realm }).pipe(
             Effect.map(c => ({
               timeout: 30,
+              logger: 'Logger.STANDARD',
               realm,
-              clientId,
-              scopes: c.scopes,
-              redirectUri: c.redirectUri,
-              serverConfig: {
-                wellknown: `${c.host}/oauth2/.well-known/openid_configuration`,
+              cookie: c.cookieName,
+              module: {
+                clientId,
+                scopes: c.scopes,
+                redirectUri: c.redirectUri,
               },
             })),
           ),

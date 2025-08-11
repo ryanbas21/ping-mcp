@@ -4,24 +4,19 @@
   "packageManager": "pnpm@9.10.0",
   "license": "MIT",
   "description": "Ping Identity MCP Server",
-  "files": [
-    "dist/*",
-    "README.md",
-    "CHANGELOG.md"
-  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryanbas21/ping-mcp"
+    "url": "<PLACEHOLDER>"
   },
   "publishConfig": {
     "access": "public",
     "directory": "dist"
   },
   "bin": {
-    "ping-mcp": "./dist/main.js"
+    "ping-mcp": "./dist/main.cjs"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsx ./scripts/copy-packagejson.ts",
     "dev": "tsx --watch src/main.ts",
     "lint": "eslint .",
     "test": "vitest",
